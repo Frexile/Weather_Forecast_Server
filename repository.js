@@ -36,7 +36,7 @@ class Repository {
     await this.collection.find().forEach(elem => {
       output.push(elem.cityName);
     });
-    console.log(output);
+    
     return output;
   }
 

@@ -29,7 +29,7 @@ class ApiRequester {
   }
 
   async getResponse(cityIdentifier) {
-      console.log(cityIdentifier)
+      
       const response = await fetch(this.urlSample + cityIdentifier, {
         method: "GET",
         headers: {
