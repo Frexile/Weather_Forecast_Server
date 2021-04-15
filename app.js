@@ -2,11 +2,19 @@ require('dotenv').config()
 const express = require("express");
 const cors = require("cors");
 const apiRequesterClass = require("./apiRequester");
+const RepositoryClass = require("./repository");
+
 const app = express();
 const apiRequester = new apiRequesterClass();
+const repo = new RepositoryClass();
+
 
 app.get("/", async (req, res) => {
     res.send()
+    await repo.connect()
+    await repo.findAll();
+
+    // repo.insert();
 });
 
 app.get("/weather/city", async (req, res) => {
@@ -39,3 +47,5 @@ app.get("/weather/coordinates", async (req, res) => {
 
 app.use(cors())
 app.listen(3000)
+
+
