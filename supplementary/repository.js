@@ -14,14 +14,17 @@ class Repository {
   }
 
   async isIncluded(coords) {
-    let res = await this.collection.find({lat : coords.lat, lon : coords.lon})
+    let res = await this.collection.findOne({lat : coords.lat, lon : coords.lon});
     return res !== null;
   }
 
   async insert(city, coords) {
     let obj = {cityName : city, lat : coords.lat, lon : coords.lon}
 
-    if (await isIncluded()) {
+    console.log("LAT:", obj.lat, "LON", obj.lon)
+
+    if (await this.isIncluded(coords)) {
+      console.log("This city is already in db");
       return;
     }
 
@@ -40,8 +43,17 @@ class Repository {
     return output;
   }
 
-  delete() {
+  async delete(coords) {
+    let filter = {lat : coords.lat, lon : coords.lon}
 
+    if (!await this.isIncluded(coords)) {
+      console.log("There is on such city in DB");
+      return;
+    }
+
+    this.collection.deleteOne(filter, (err, res) => {
+      console.log(res);
+    });
   }
 
   disconnect() {

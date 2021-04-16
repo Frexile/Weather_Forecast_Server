@@ -1,12 +1,21 @@
 require('dotenv').config()
 const express = require("express");
 const cors = require("cors");
-const apiRequesterClass = require("./apiRequester");
-const RepositoryClass = require("./repository");
+// const bodyParser = require('body-parser');
+
+
+const apiRequesterClass = require("./supplementary/apiRequester");
+const RepositoryClass = require("./supplementary/repository");
 
 const app = express();
 const apiRequester = new apiRequesterClass();
 const repo = new RepositoryClass();
+// const urlEncodedParser = bodyParser.urlencoded({extended: false});
+
+app.use(express.json())
+app.use(cors())
+
+app.listen(process.env.PORT || 3000)
 
 
 app.get("/", async (req, res) => {
@@ -55,14 +64,35 @@ app.get("/favourites", async (req, res) => {
 });
 
 app.post("/favourites", async (req, res) => {
-
+    await repo.connect();
+    
+    console.log(req.body)
+    if(req.body === null) { // НЕ ЗАХОДИТ
+        console.log("ERROR")
+        return res.sendStatus(400);
+    } 
+    
+    const jsonData = await apiRequester.getResponse(req.body.cityName);
+    await repo.insert(jsonData.cityName, jsonData.coords);
+    
+    res.sendStatus(201);
 });
 
 app.delete("/favourites", async (req, res) => {
+    await repo.connect();
 
+    console.log(req.body)
+    if(!req.body) { // НЕ ЗАХОДИТ
+        console.log("ERROR")
+        return res.sendStatus(400);
+    } 
+
+    const jsonData = await apiRequester.getResponse(req.body.cityName);
+    await repo.delete(jsonData.coords);
+
+    res.sendStatus(204);
 });
 
-app.use(cors())
-app.listen(process.env.PORT || 3000)
+
 
 
