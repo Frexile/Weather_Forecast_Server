@@ -29,16 +29,19 @@ class ApiRequester {
   }
 
   async getResponse(cityIdentifier) {
-      
-      const response = await fetch(this.urlSample + cityIdentifier, {
+      console.log("Classic -->",this.urlSample + cityIdentifier);
+      console.log("ENCODED CITY NAME -->", this.urlSample + encodeURIComponent(cityIdentifier));
+      // encodeURI()
+      const response = await fetch(this.urlSample + encodeURIComponent(cityIdentifier) , {
         method: "GET",
         headers: {
           "x-rapidapi-key": this.key,
           "x-rapidapi-host": this.host,
-        },
+        }
       });
       
       let json = await response.json();
+      
       return this.simlifyJsonData(json);
   }
 }

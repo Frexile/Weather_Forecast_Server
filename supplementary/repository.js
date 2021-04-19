@@ -18,15 +18,16 @@ class Repository {
     return res !== null;
   }
 
-  async insert(city, coords) {
+  async insert(city, coords, res) {
     let obj = {cityName : city, lat : coords.lat, lon : coords.lon}
 
     console.log("LAT:", obj.lat, "LON", obj.lon)
 
-    if (await this.isIncluded(coords)) {
-      console.log("This city is already in db");
-      return;
-    }
+    // if (await this.isIncluded(coords)) {
+    //   console.log("This city is already in db");
+    //   res.sendStatus(409);
+    //   return;
+    // }
 
     this.collection.insertOne(obj, (err, res) => {
       console.log(res);
