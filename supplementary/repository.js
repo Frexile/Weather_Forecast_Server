@@ -20,9 +20,9 @@ class Repository {
   }
 
   async insert(city, coords, res) {
-    let obj = {cityName : city, lat : coords.lat, lon : coords.lon}
+    let obj = {cityName : city, lat : coords.lat, lon : coords.lon};
 
-    console.log("LAT:", obj.lat, "LON", obj.lon)
+    console.log("LAT:", obj.lat, "LON", obj.lon);
 
     this.collection.insertOne(obj, (err, res) => {
       console.log(res);
@@ -30,7 +30,7 @@ class Repository {
   }
   
   async findAll() {
-    const output = []
+    const output = [];
 
     await this.collection.find().forEach(elem => {
       output.push(elem.cityName);
@@ -53,7 +53,7 @@ class Repository {
   }
 
   disconnect() {
-    this.client.close()
+    this.client.close();
   }
 }
 

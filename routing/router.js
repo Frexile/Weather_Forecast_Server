@@ -11,14 +11,14 @@ router.get("/weather/city", async (req, res) => {
   const jsonData = await apiRequester.getResponse(req.query.q.replace(/ /g, '%20'));
 
   if (!req.query.q) {
-    res.status(404);
     res.sendStatus(404);
+    return;
   } else if (jsonData.error) {
-    res.status(400);
     res.sendStatus(400);
-  } else {
-    res.json(jsonData);
+    return;
   }
+
+  res.json(jsonData);
 });
 
 router.get("/weather/coordinates", async (req, res) => {
@@ -28,18 +28,19 @@ router.get("/weather/coordinates", async (req, res) => {
   const jsonData = await apiRequester.getResponse(`${lat},${long}`);
 
   if (jsonData.error) {
-      res.status(404);
-      res.sendStatus(404)
-  } else {
-      res.json(jsonData)
-  }
+    res.status(404);
+    res.sendStatus(404);
+    return;
+  } 
+
+  res.json(jsonData);
 });
 
 router.get("/favourites", async (req, res) => {
   const favList = await repo.findAll();
 
   let favResponses = await Promise.all(favList.map( item => {
-    return apiRequester.getResponse(item)
+    return apiRequester.getResponse(item);
   }));
 
   res.json(favResponses);
