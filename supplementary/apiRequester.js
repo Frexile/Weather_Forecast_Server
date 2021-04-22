@@ -7,7 +7,7 @@ class ApiRequester {
       this.urlSample = "https://weatherapi-com.p.rapidapi.com/current.json?q=";
   }
 
-  async simlifyJsonData(jsonData){
+  async simplifyJsonData(jsonData){
     const {location, current} = jsonData;
 
     let resJson = {
@@ -43,7 +43,7 @@ class ApiRequester {
         return 400;
       }
 
-      return this.simlifyJsonData(json);
+      return this.simplifyJsonData(json);
   }
 }
 
