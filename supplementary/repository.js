@@ -6,7 +6,7 @@ class Repository {
     try {
       console.log(process.env.MONGO_URI);
       this.client = await MongoClient.connect(`${process.env.MONGO_URI}`, { useNewUrlParser: true, useUnifiedTopology: true });
-      this.collection = await this.client.db(process.env.MONGO_DB).collection(process.env.MONGO_COLLECTIONS);
+      this.collection = await this.client.db(`${process.env.MONGO_DB}`).collection(`${process.env.MONGO_COLLECTIONS}`);
       
       console.log(`Connection to ${this.collection.collectionName} is successfully done`);
     } catch (err) {
