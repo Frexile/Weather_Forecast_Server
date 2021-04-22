@@ -23,12 +23,6 @@ class Repository {
 
     console.log("LAT:", obj.lat, "LON", obj.lon)
 
-    // if (await this.isIncluded(coords)) {
-    //   console.log("This city is already in db");
-    //   res.sendStatus(409);
-    //   return;
-    // }
-
     this.collection.insertOne(obj, (err, res) => {
       console.log(res);
     });

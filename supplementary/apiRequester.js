@@ -29,9 +29,6 @@ class ApiRequester {
   }
 
   async getResponse(cityIdentifier) {
-      console.log("Classic -->",this.urlSample + cityIdentifier);
-      console.log("ENCODED CITY NAME -->", this.urlSample + encodeURIComponent(cityIdentifier));
-      // encodeURI()
       const response = await fetch(this.urlSample + encodeURIComponent(cityIdentifier) , {
         method: "GET",
         headers: {
@@ -42,6 +39,10 @@ class ApiRequester {
       
       let json = await response.json();
       
+      if (json.error) {
+        return 400;
+      }
+
       return this.simlifyJsonData(json);
   }
 }

@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const ApiRequesterClass = require("../supplementary/apiRequester");
 const RepositoryClass = require("../supplementary/repository");
@@ -23,7 +24,7 @@ router.get("/weather/city", async (req, res) => {
 router.get("/weather/coordinates", async (req, res) => {
   let lat = req.query.lat;
   let long = req.query.long;
-  console.log(lat, long)
+  
   const jsonData = await apiRequester.getResponse(`${lat},${long}`);
 
   if (jsonData.error) {
@@ -35,11 +36,9 @@ router.get("/weather/coordinates", async (req, res) => {
 });
 
 router.get("/favourites", async (req, res) => {
-  // await repo.connect();
   const favList = await repo.findAll();
 
   let favResponses = await Promise.all(favList.map( item => {
-    console.log(item)
     return apiRequester.getResponse(item)
   }));
 
@@ -47,17 +46,12 @@ router.get("/favourites", async (req, res) => {
 });
 
 router.post("/favourites", async (req, res) => {
-  // await repo.connect();
-  
-  console.log(req.body)
-  if(req.body === {}) { // НЕ ЗАХОДИТ
-      console.log("ERROR")
-      return res.sendStatus(400);
-  } 
-  
   const jsonData = await apiRequester.getResponse(req.body.cityName);
 
-  console.log(jsonData);
+  if (jsonData === 400) {
+    res.sendStatus(400);
+    return;
+  } 
 
   if (await repo.isIncluded(jsonData.coords)) {
     console.log("This city is already in db");
@@ -71,14 +65,6 @@ router.post("/favourites", async (req, res) => {
 });
 
 router.delete("/favourites", async (req, res) => {
-  // await repo.connect();
-
-  console.log(req.body)
-  if(req.body === null) { // НЕ ЗАХОДИТ
-      console.log("ERROR")
-      return res.sendStatus(400);
-  } 
-
   const jsonData = await apiRequester.getResponse(req.body.cityName);
   await repo.delete(jsonData.coords);
 
